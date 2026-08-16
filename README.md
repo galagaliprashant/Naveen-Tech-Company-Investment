@@ -12,11 +12,12 @@
 ### 🎯 **For Investor Pitches**
 
 1. **investor-presentation.html** ⭐ **START HERE**
-   - Interactive HTML slide deck (13 slides)
+   - Interactive HTML slide deck (14 slides)
    - Works in any browser (Chrome, Safari, Firefox)
    - Navigate with arrow keys or click "Next" button
    - Perfect for live investor presentations
    - **How to use:** Open file in browser, press arrow keys to navigate
+   - **Slides include:** Partnership opportunity → Problem → Solution → Market → Traction → **Initial Clients & Projects** → Financial Ask → Projections → Risk Mitigation → Terms → Why Invest → Bottom Line
 
 2. **EXECUTIVE_SUMMARY.md**
    - One-page investor summary
@@ -45,6 +46,29 @@
    - Slide-by-slide notes and talking points
    - Detailed explanations for each slide
    - Use as presenter notes during pitch
+
+---
+
+## 📺 Presentation Slides Overview
+
+**Slide 1:** Title & Investment Thesis  
+**Slide 2:** Partnership Opportunity (own your tech services branch)  
+**Slide 3:** The Problem (market fragmentation, buyer pain points)  
+**Slide 4:** The Solution (2-phase approach: Services + Academy)  
+**Slide 5:** Why Phased Approach (de-risking strategy)  
+**Slide 6:** Market Opportunity (₹50K+ Crore digital transformation, growth drivers)  
+**Slide 7:** Traction (founder track record, advisory team, governance)  
+**Slide 8:** ✨ **Initial Clients & Projects** — ₹85L+ Signed Pipeline
+   - Hyrox Fit Club: Digital Marketing + Website (₹22L, 4 months)
+   - Naveen Sir's PR: Brand Building Campaign (₹18L, 3 months)
+   - ArtSanshi Ventures: Platform from scratch with AWS infra (₹50L, 6 months)
+   - Demonstrates proven delivery complexity, diverse verticals, locked-in revenue  
+**Slide 9:** Financial Ask & Use of Capital (tranche structure with gates)  
+**Slide 10:** Revenue & EBITDA Path (24-month financial projections)  
+**Slide 11:** Risk Mitigation & Board Controls  
+**Slide 12:** Investment Terms & Governance  
+**Slide 13:** Why Work With Parambhaav (founder expertise + operational efficiency)  
+**Slide 14:** The Bottom Line (visual summary: ₹1Cr+ revenue, 4-6x return, 55% margins)
 
 ---
 
@@ -79,7 +103,8 @@
 | Metric | Value |
 |--------|-------|
 | **Investment Ask** | ₹5 Crore (24 months) |
-| **Year-1 Revenue Target** | ₹1.3-1.8 Crore (signed pipeline) |
+| **Signed Client Pipeline** | ₹85L+ Year-1 revenue (3 locked contracts) |
+| **Year-1 Revenue Target** | ₹1.3-1.8 Crore (signed pipeline + follow-on) |
 | **Year-2 Revenue Target** | ₹3.5-4.6 Crore |
 | **Year-4 Revenue Target** | ₹25.5-30.5 Crore |
 | **Breakeven** | Month 10-12 of Year 1 |
