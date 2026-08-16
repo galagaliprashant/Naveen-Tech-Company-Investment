@@ -228,22 +228,32 @@
     .chart-wrap { height: 220px; position: relative; }
 
     /* Milestone tracker */
+    /* Milestone tracker */
     .milestone-list { padding: 0; }
     .milestone-item {
-      display: flex;
-      gap: 16px;
-      padding: 14px 22px;
       border-bottom: 1px solid var(--gray-100);
-      align-items: flex-start;
     }
     .milestone-item:last-child { border-bottom: none; }
+
+    /* Clickable header row */
+    .m-header {
+      display: flex;
+      gap: 14px;
+      padding: 14px 22px;
+      align-items: flex-start;
+      cursor: pointer;
+      user-select: none;
+      transition: background .15s;
+    }
+    .m-header:hover { background: var(--gray-50); }
+
     .m-dot {
       width: 32px; height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75em;
+      font-size: 0.72em;
       font-weight: 700;
       flex-shrink: 0;
       margin-top: 2px;
@@ -251,11 +261,16 @@
     .m-dot.done    { background: #DCFCE7; color: #166534; }
     .m-dot.active  { background: var(--indigo); color: var(--white); box-shadow: 0 0 0 4px rgba(99,102,241,.15); }
     .m-dot.pending { background: var(--gray-100); color: var(--gray-400); }
-    .m-content { flex: 1; }
-    .m-title   { font-size: 0.87em; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
-    .m-desc    { font-size: 0.77em; color: var(--gray-600); line-height: 1.5; margin-bottom: 5px; }
+
+    .m-content { flex: 1; min-width: 0; }
+    .m-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; gap: 8px; }
+    .m-title   { font-size: 0.87em; font-weight: 700; color: var(--navy); }
+    .m-amount  { font-size: 0.82em; font-weight: 700; color: var(--indigo); white-space: nowrap; }
+    .m-desc    { font-size: 0.77em; color: var(--gray-600); line-height: 1.5; margin-bottom: 6px; }
+
+    .m-footer  { display: flex; align-items: center; justify-content: space-between; }
     .m-tag {
-      display: inline-block;
+      display: inline-flex; align-items: center; gap: 4px;
       border-radius: 50px;
       padding: 2px 9px;
       font-size: 0.68em;
@@ -264,7 +279,57 @@
     .m-tag.done    { background: #DCFCE7; color: #166534; }
     .m-tag.active  { background: #EEF2FF; color: var(--indigo-dark); }
     .m-tag.pending { background: var(--gray-100); color: var(--gray-600); }
-    .m-amount { font-size: 0.82em; font-weight: 700; color: var(--indigo); }
+
+    /* Chevron toggle */
+    .m-chevron {
+      font-size: 0.7em;
+      color: var(--gray-400);
+      transition: transform .25s;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .m-header.open .m-chevron { transform: rotate(180deg); }
+
+    /* Progress bar */
+    .prog-bar { height: 5px; background: var(--gray-100); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+    .prog-fill { height: 100%; border-radius: 3px; }
+    .prog-fill.indigo { background: var(--indigo); }
+    .prog-fill.gold   { background: var(--gold); }
+    .prog-fill.green  { background: var(--green); }
+
+    /* Expandable action list */
+    .m-actions {
+      display: none;
+      padding: 0 22px 14px 68px;
+      flex-direction: column;
+      gap: 0;
+    }
+    .m-actions.open { display: flex; }
+
+    .action-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 0.8em;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+    .action-item:last-child { border-bottom: none; }
+    .action-item.done-item  { color: var(--navy); }
+
+    .action-check {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65em;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .action-check.done    { background: #DCFCE7; color: #166534; }
+    .action-check.pending { background: var(--gray-100); color: var(--gray-400); border: 1.5px dashed var(--gray-300); }
 
     /* Client pipeline */
     .client-row {
@@ -302,11 +367,7 @@
     .client-status.final    { background: #FEF9C3; color: #854D0E; }
 
     /* Progress bar */
-    .prog-bar { height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; margin-top: 8px; }
-    .prog-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
-    .prog-fill.indigo { background: var(--indigo); }
-    .prog-fill.gold   { background: var(--gold); }
-    .prog-fill.green  { background: var(--green); }
+    .prog-fill { transition: width .6s ease; }
 
     /* Stats row */
     .stat-row {
@@ -528,54 +589,199 @@
             <span>&#8377;5Cr over 4 tranches</span>
           </div>
           <div class="milestone-list">
+
+            <!-- T1 -->
             <div class="milestone-item">
-              <div class="m-dot active">T1</div>
-              <div class="m-content">
-                <div class="m-title">Tranche 1 &mdash; Month 1</div>
-                <div class="m-desc">Setup: team, office, legal, equipment, working capital</div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                  <span class="m-tag active">&#9654; Current Stage</span>
-                  <span class="m-amount">&#8377;1.5 Crore</span>
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot active">T1</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 1 &mdash; Month 1</div>
+                    <div class="m-amount">&#8377;1.5 Crore</div>
+                  </div>
+                  <div class="m-desc">Setup: company, team, office, legal, equipment &amp; working capital</div>
+                  <div class="m-footer">
+                    <span class="m-tag active">&#9654; Current Stage</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">5 / 7 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:72%"></div></div>
                 </div>
-                <div class="prog-bar" style="margin-top:8px;"><div class="prog-fill indigo" style="width:100%"></div></div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Company registered &amp; legal entity formed (PVT LTD)
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Founding team onboarded (Prashanth + Manjunath)
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Office space secured in Bengaluru
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Bank account opened &amp; board signatories confirmed
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  3 client contracts signed (Hyrox, Naveen PR, ArtSanshi)
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Equipment &amp; tech infrastructure purchased
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Accounting &amp; GST compliance framework finalised
+                </div>
               </div>
             </div>
+
+            <!-- T2 -->
             <div class="milestone-item">
-              <div class="m-dot pending">T2</div>
-              <div class="m-content">
-                <div class="m-title">Tranche 2 &mdash; Month 4</div>
-                <div class="m-desc">Hire 4&ndash;6 engineers, delivery acceleration. Gate: &#8377;30L+ revenue, 46%+ margin</div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                  <span class="m-tag pending">Pending Gate</span>
-                  <span class="m-amount">&#8377;1.5 Crore</span>
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot pending">T2</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 2 &mdash; Month 4</div>
+                    <div class="m-amount">&#8377;1.5 Crore</div>
+                  </div>
+                  <div class="m-desc">Delivery acceleration &amp; team expansion</div>
+                  <div class="m-footer">
+                    <span class="m-tag pending">Pending Gate</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">0 / 6 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:0%"></div></div>
                 </div>
-                <div class="prog-bar" style="margin-top:8px;"><div class="prog-fill indigo" style="width:0%"></div></div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Revenue of &#8377;30L+ achieved by Month 4
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Gross margin maintained at 46%+
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Client satisfaction verified by Board
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Hire 4&ndash;6 additional engineers (with signing bonuses)
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Launch marketing campaigns to expand client pipeline
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Deliver first milestone on all 3 signed contracts
+                </div>
               </div>
             </div>
+
+            <!-- T3 -->
             <div class="milestone-item">
-              <div class="m-dot pending">T3</div>
-              <div class="m-content">
-                <div class="m-title">Tranche 3 &mdash; Month 10</div>
-                <div class="m-desc">Academy + FDE mgmt infra. Gate: &#8377;50L+ revenue, Board approves curriculum</div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                  <span class="m-tag pending">Pending Gate</span>
-                  <span class="m-amount">&#8377;1.0 Crore</span>
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot pending">T3</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 3 &mdash; Month 10</div>
+                    <div class="m-amount">&#8377;1.0 Crore</div>
+                  </div>
+                  <div class="m-desc">Academy launch &amp; FDE management infrastructure</div>
+                  <div class="m-footer">
+                    <span class="m-tag pending">Pending Gate</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">0 / 7 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:0%"></div></div>
                 </div>
-                <div class="prog-bar" style="margin-top:8px;"><div class="prog-fill indigo" style="width:0%"></div></div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Year-1 revenue &#8377;50L+ confirmed
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> All 3 original clients retained &amp; active
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Gross margin improved to 48%+
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Academy curriculum drafted &amp; Board-approved
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Hire 2 academy trainers (salary + benefits for 6 months)
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Set up FDE management team structure
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Begin development of academy tech platform (LMS)
+                </div>
               </div>
             </div>
+
+            <!-- T4 -->
             <div class="milestone-item">
-              <div class="m-dot pending">T4</div>
-              <div class="m-content">
-                <div class="m-title">Tranche 4 &mdash; Month 16</div>
-                <div class="m-desc">Scale: 4&ndash;8 more engineers, aggressive growth. Gate: &#8377;1.3Cr+ Year-1 revenue, EBITDA path clear</div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                  <span class="m-tag pending">Pending Gate</span>
-                  <span class="m-amount">&#8377;1.0 Crore</span>
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot pending">T4</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 4 &mdash; Month 16</div>
+                    <div class="m-amount">&#8377;1.0 Crore</div>
+                  </div>
+                  <div class="m-desc">Scale operations &amp; aggressive growth phase</div>
+                  <div class="m-footer">
+                    <span class="m-tag pending">Pending Gate</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">0 / 6 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:0%"></div></div>
                 </div>
-                <div class="prog-bar" style="margin-top:8px;"><div class="prog-fill indigo" style="width:0%"></div></div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Full Year-1 revenue &#8377;1.3Cr+ confirmed
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> EBITDA breakeven path validated by Board
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Recurring revenue is 25%+ of total revenue
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> FDE pilots running with 1&ndash;2 clients
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Hire 4&ndash;8 additional engineers for scale
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Expand office space &amp; scale sales/marketing team
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -818,6 +1024,19 @@
     if (sessionStorage.getItem('inv_auth') === '1') {
       showDashboard(sessionStorage.getItem('inv_name') || 'Investor');
     }
+
+    function toggleTranche(header) {
+      const actions = header.nextElementSibling;
+      const isOpen  = header.classList.contains('open');
+      header.classList.toggle('open', !isOpen);
+      actions.classList.toggle('open', !isOpen);
+    }
+
+    // Auto-open T1 on load since it's the current stage
+    document.addEventListener('DOMContentLoaded', () => {
+      const firstHeader = document.querySelector('.m-header');
+      if (firstHeader) toggleTranche(firstHeader);
+    });
 
     let portalChartInited = false;
     function initPortalChart() {
