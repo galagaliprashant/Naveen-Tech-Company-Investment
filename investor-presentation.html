@@ -306,8 +306,17 @@
     .client-card p  { font-size: 0.77em; color: var(--gray-600); line-height: 1.6; margin-bottom: 5px; }
     .client-amount  { font-size: 1.3em; font-weight: 800; color: var(--indigo); margin-top: 8px; }
 
-    /* Chart */
-    .chart-wrap { position: relative; height: 200px; margin: 12px 0; }
+    /* Financial story */
+    .financial-story { margin: 18px 0 14px; padding: 18px 20px; border: 1px solid #E0E7FF; border-radius: var(--radius); background: linear-gradient(135deg, #F8FAFF 0%, #EEF2FF 100%); }
+    .financial-story-intro { font-size: .86em; color: var(--gray-600); margin-bottom: 14px; line-height: 1.5; }
+    .financial-story-intro strong { color: var(--navy); }
+    .financial-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .financial-step { background: var(--white); border: 1px solid var(--gray-200); border-radius: 9px; padding: 12px; }
+    .financial-step-year { color: var(--indigo); font-size: .7em; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; }
+    .financial-step-revenue { color: var(--navy); font-size: 1.08em; font-weight: 800; margin: 5px 0 2px; }
+    .financial-step-ebitda { color: var(--green); font-size: .76em; font-weight: 700; }
+    .financial-step-ebitda.loss { color: var(--red); }
+    .financial-step-note { color: var(--gray-600); font-size: .68em; line-height: 1.35; margin-top: 7px; }
 
     /* Closing */
     .closing-title {
@@ -421,12 +430,29 @@
       .cover-ask { flex-direction: column; align-items: center; }
       .closing-chips { flex-direction: column; align-items: center; }
       .slide-heading { font-size: 1.55em; }
+      .financial-steps { grid-template-columns: repeat(2, 1fr); }
     }
     @media print {
-      body { background: white; }
+      @page { size: 1100px 680px; margin: 0; }
+      html, body { width: 100%; height: auto; background: white; }
+      body { display: block; padding: 0; }
       #print-btn, #progress-bar { display: none; }
-      .deck { box-shadow: none; border-radius: 0; }
-      .slide { break-inside: avoid; display: flex !important; min-height: auto; padding: 30px 48px; }
+      .deck, .slides-viewport { width: 100%; max-width: none; min-height: 0; overflow: visible; box-shadow: none; border-radius: 0; }
+      .slide {
+        display: flex !important;
+        box-sizing: border-box;
+        zoom: .82;
+        width: 121.95%;
+        min-height: 829px;
+        padding: 22px 40px;
+        font-size: .72em;
+        break-after: page;
+        page-break-after: always;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        animation: none !important;
+      }
+      .slide:last-child { break-after: auto; page-break-after: auto; }
       .controls, .slide-title-strip { display: none; }
     }
   </style>
@@ -623,7 +649,7 @@
           </div>
           <div class="client-card gold-top">
             <h4>&#127959; ArtSanshi Ventures</h4>
-            <p><strong>Scope:</strong> Platform + FDE Team built from scratch &mdash; AWS infra, loan distribution, Udyam Kendra + Bookyagift marketplace</p>
+            <p><strong>Scope:</strong> Two projects &mdash; <strong>Udyam Kendra</strong> and <strong>Bookyagift Marketplace</strong> &mdash; plus AWS infrastructure, loan distribution, and an FDE team built from scratch</p>
             <p><strong>Timeline:</strong> 6 months</p>
             <div class="client-amount" style="color:#B45309;">&#8377;50 Lakhs</div>
           </div>
@@ -645,37 +671,45 @@
         <div class="timeline">
           <div class="phase">
             <div class="phase-dot">T1</div>
-            <div class="phase-title">Tranche 1 &mdash; Month 1 &middot; &#8377;1.5 Crore</div>
-            <p><strong>Use:</strong> Salaries 6 months (&#8377;30L) &middot; Office rent (&#8377;20L) &middot; Legal &amp; compliance (&#8377;15L) &middot; Equipment (&#8377;10L) &middot; Working capital (&#8377;25L)</p>
-            <p><strong>Gate:</strong> None &mdash; launch investment, released at signing</p>
+            <div class="phase-title">Tranche 1 &mdash; Establish the operating base &middot; Month 1 &middot; &#8377;1.5 Crore</div>
+            <p><strong>Funds:</strong> Initial delivery team, a lean Bengaluru office, legal/compliance, equipment, cloud tools and working capital.</p>
+            <p><strong>Outcome:</strong> A fully operating company ready to onboard and deliver the three signed client engagements. <strong>Release:</strong> At signing, against the approved launch budget.</p>
           </div>
           <div class="phase">
             <div class="phase-dot">T2</div>
-            <div class="phase-title">Tranche 2 &mdash; Month 4 &middot; &#8377;1.5 Crore</div>
-            <p><strong>Use:</strong> Hire 4&ndash;6 engineers (&#8377;40L) &middot; Salaries 6 months (&#8377;45L) &middot; Marketing (&#8377;20L) &middot; Equipment (&#8377;15L)</p>
-            <p><strong>Gate:</strong> &#8377;30L+ revenue &middot; team on schedule &middot; gross margin 46%+ &middot; high client satisfaction</p>
+            <div class="phase-title">Tranche 2 &mdash; Prove delivery, then expand &middot; Month 4 &middot; &#8377;1.5 Crore</div>
+            <p><strong>Funds:</strong> 4&ndash;6 additional engineers, six months of delivery capacity, focused client acquisition and essential equipment.</p>
+            <p><strong>Outcome:</strong> Deliver initial client milestones while building capacity for follow-on work. <strong>Release gate:</strong> &#8377;30L+ revenue, 46%+ gross margin, on-schedule hiring and verified client satisfaction.</p>
           </div>
           <div class="phase">
             <div class="phase-dot">T3</div>
-            <div class="phase-title">Tranche 3 &mdash; Month 10 &middot; &#8377;1.0 Crore</div>
-            <p><strong>Use:</strong> Academy curriculum (&#8377;15L) &middot; 2 trainers 6 months (&#8377;25L) &middot; FDE mgmt team (&#8377;20L) &middot; Tech platform (&#8377;25L)</p>
-            <p><strong>Gate:</strong> Year-1 revenue &#8377;50L+ &middot; 3 clients retained &middot; margin 48%+ &middot; Board approves curriculum</p>
+            <div class="phase-title">Tranche 3 &mdash; Add repeatable revenue engines &middot; Month 10 &middot; &#8377;1.0 Crore</div>
+            <p><strong>Funds:</strong> Academy curriculum and trainers, FDE management capability and the supporting learning/operations platform.</p>
+            <p><strong>Outcome:</strong> Pilot the academy only after the services model is working, creating a measured path to managed-FDE recurring revenue. <strong>Release gate:</strong> &#8377;50L+ revenue, 3 clients retained, 48%+ margin and Board-approved curriculum.</p>
           </div>
           <div class="phase">
             <div class="phase-dot">T4</div>
-            <div class="phase-title">Tranche 4 &mdash; Month 16 &middot; &#8377;1.0 Crore</div>
-            <p><strong>Use:</strong> 4&ndash;8 more engineers (&#8377;60L) &middot; Sales &amp; marketing scale (&#8377;30L) &middot; Office expansion (&#8377;15L) &middot; Tech investments (&#8377;20L)</p>
-            <p><strong>Gate:</strong> Year-1 revenue &#8377;1.3Cr+ &middot; EBITDA breakeven path clear &middot; recurring revenue 25%+</p>
+            <div class="phase-title">Tranche 4 &mdash; Scale what has been proven &middot; Month 16 &middot; &#8377;1.0 Crore</div>
+            <p><strong>Funds:</strong> 4&ndash;8 more engineers, sales and marketing scale-up, selective office capacity and high-return technology investments.</p>
+            <p><strong>Outcome:</strong> Grow the proven service and FDE lines without committing capital prematurely. <strong>Release gate:</strong> &#8377;1.3Cr+ Year-1 revenue, a Board-validated path to EBITDA breakeven and 25%+ recurring revenue.</p>
           </div>
         </div>
-        <div class="alert"><strong>Monthly Burn Rate:</strong> &#8377;40&ndash;45L (Team &#8377;35&ndash;38L + Overhead &#8377;8&ndash;10L)</div>
+        <div class="alert"><strong>Investor safeguard:</strong> This is a milestone-controlled funding plan, not a blank cheque. The Board reviews monthly cash, revenue, margin and delivery progress before any later release. <strong>Planned monthly burn:</strong> &#8377;40&ndash;45L.</div>
       </div>
 
       <!-- Slide 10: Financials -->
       <div class="slide" data-title="Revenue & EBITDA Projections">
         <div class="slide-label">Financials</div>
         <h2 class="slide-heading">Revenue &amp; EBITDA <span class="accent">Path (4 Years)</span></h2>
-        <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+        <div class="financial-story">
+          <p class="financial-story-intro"><strong>The financial shift:</strong> Year 1 establishes the services base; Years 2&ndash;4 increase higher-margin, recurring revenue through support, the academy and managed FDE engagements.</p>
+          <div class="financial-steps">
+            <div class="financial-step"><div class="financial-step-year">Year 1 &middot; Prove</div><div class="financial-step-revenue">&#8377;1.3&ndash;1.8Cr</div><div class="financial-step-ebitda loss">EBITDA: (&#8377;0.5Cr)</div><div class="financial-step-note">Deliver signed work and establish a recurring-support base.</div></div>
+            <div class="financial-step"><div class="financial-step-year">Year 2 &middot; Stabilise</div><div class="financial-step-revenue">&#8377;3.5&ndash;4.6Cr</div><div class="financial-step-ebitda">EBITDA: &#8377;0.2&ndash;0.5Cr</div><div class="financial-step-note">Reach profitability as the academy and first FDE engagements begin.</div></div>
+            <div class="financial-step"><div class="financial-step-year">Year 3 &middot; Repeat</div><div class="financial-step-revenue">&#8377;9.8&ndash;11.8Cr</div><div class="financial-step-ebitda">EBITDA: &#8377;2&ndash;3Cr</div><div class="financial-step-note">Scale managed FDE capacity and deepen recurring client relationships.</div></div>
+            <div class="financial-step"><div class="financial-step-year">Year 4 &middot; Scale</div><div class="financial-step-revenue">&#8377;25.5&ndash;30.5Cr</div><div class="financial-step-ebitda">EBITDA: &#8377;8&ndash;10Cr</div><div class="financial-step-note">A higher-margin business with 55% gross margin and recurring revenue leadership.</div></div>
+          </div>
+        </div>
         <table style="margin-top:12px;font-size:.76em;">
           <thead><tr><th>Metric</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th></tr></thead>
           <tbody>
@@ -842,7 +876,6 @@
       document.getElementById('nextBtn').disabled = current === total;
       updateDots();
       updateProgress();
-      if (n === 10) initChart();
     }
 
     function changeSlide(d) { showSlide(current + d, d); }
