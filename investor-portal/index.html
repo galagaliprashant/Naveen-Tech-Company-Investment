@@ -29,86 +29,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--gray-100); min-height: 100vh; }
 
-    /* ── Login screen ── */
-    #login-screen {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--navy) 0%, #312E81 60%, var(--navy-mid) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .login-box {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 20px;
-      padding: 48px 40px;
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-      backdrop-filter: blur(20px);
-    }
-    .login-logo {
-      font-size: 2.2em;
-      font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, #fff 30%, var(--gold-light) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 6px;
-    }
-    .login-sub { font-size: 0.85em; color: rgba(255,255,255,.55); margin-bottom: 36px; }
-    .login-label { display: block; text-align: left; font-size: 0.78em; font-weight: 600; color: rgba(255,255,255,.6); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 8px; }
-    .login-input {
-      width: 100%;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.15);
-      border-radius: 8px;
-      padding: 13px 16px;
-      color: var(--white);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95em;
-      margin-bottom: 20px;
-      outline: none;
-      transition: border-color .2s;
-    }
-    .login-input:focus { border-color: var(--indigo); }
-    .login-input::placeholder { color: rgba(255,255,255,.3); }
-    .login-btn {
-      width: 100%;
-      background: var(--indigo);
-      color: var(--white);
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95em;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s, transform .1s;
-    }
-    .login-btn:hover { background: var(--indigo-dark); transform: translateY(-1px); }
-    .login-error {
-      font-size: 0.82em;
-      color: #FCA5A5;
-      margin-top: 14px;
-      display: none;
-    }
-    .login-badge {
-      display: inline-block;
-      background: rgba(245,158,11,.15);
-      border: 1px solid rgba(245,158,11,.3);
-      border-radius: 50px;
-      padding: 5px 14px;
-      font-size: 0.72em;
-      color: var(--gold-light);
-      margin-bottom: 28px;
-      letter-spacing: .5px;
-    }
-
     /* ── Portal dashboard ── */
-    #dashboard { display: none; }
+    #dashboard { display: block; }
 
     /* Topbar */
     .topbar {
@@ -486,27 +408,6 @@
 </head>
 <body>
 
-  <!-- LOGIN SCREEN -->
-  <div id="login-screen">
-    <div class="login-box">
-      <div class="login-logo">PARAMBHAAV</div>
-      <p class="login-sub">Technology Services &middot; Academy &middot; Managed Engineering</p>
-      <div class="login-badge">&#128274; Investor Portal &mdash; Confidential</div>
-
-      <label class="login-label" for="inv-name">Your Name</label>
-      <input class="login-input" id="inv-name" type="text" placeholder="e.g. Naveen Kumar" autocomplete="off" />
-
-      <label class="login-label" for="inv-pass">Access Code</label>
-      <input class="login-input" id="inv-pass" type="password" placeholder="Enter access code" autocomplete="off"
-             onkeydown="if(event.key==='Enter') doLogin()" />
-
-      <button class="login-btn" onclick="doLogin()">Access Investor Portal &rarr;</button>
-      <p class="login-error" id="login-error">Incorrect access code. Please contact Prashanth.</p>
-
-      <p style="color:rgba(255,255,255,.35);font-size:.7em;margin-top:20px;">For access: prashanth@parambhaav.com</p>
-    </div>
-  </div>
-
   <!-- DASHBOARD -->
   <div id="dashboard">
     <!-- Topbar -->
@@ -514,8 +415,6 @@
       <div class="topbar-logo">PARAMBHAAV</div>
       <div class="topbar-right">
         <span class="topbar-badge">Investor Portal</span>
-        <span id="investor-name-badge" style="font-size:.8em;color:rgba(255,255,255,.6);"></span>
-        <button class="logout-btn" onclick="doLogout()">Sign Out</button>
       </div>
     </div>
 
@@ -987,44 +886,6 @@
   </div>
 
   <script>
-    const ACCESS_CODE = 'Naveen@2026';
-
-    function doLogin() {
-      const name = document.getElementById('inv-name').value.trim();
-      const pass = document.getElementById('inv-pass').value;
-      const err  = document.getElementById('login-error');
-
-      if (pass !== ACCESS_CODE) {
-        err.style.display = 'block';
-        document.getElementById('inv-pass').style.borderColor = '#EF4444';
-        return;
-      }
-
-      sessionStorage.setItem('inv_auth', '1');
-      sessionStorage.setItem('inv_name', name || 'Investor');
-      showDashboard(name || 'Investor');
-    }
-
-    function showDashboard(name) {
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      document.getElementById('investor-name-badge').textContent = 'Welcome, ' + name;
-      initPortalChart();
-    }
-
-    function doLogout() {
-      sessionStorage.removeItem('inv_auth');
-      sessionStorage.removeItem('inv_name');
-      document.getElementById('login-screen').style.display = 'flex';
-      document.getElementById('dashboard').style.display = 'none';
-      document.getElementById('inv-pass').value = '';
-    }
-
-    // Auto-login if session exists
-    if (sessionStorage.getItem('inv_auth') === '1') {
-      showDashboard(sessionStorage.getItem('inv_name') || 'Investor');
-    }
-
     function toggleTranche(header) {
       const actions = header.nextElementSibling;
       const isOpen  = header.classList.contains('open');
@@ -1036,6 +897,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const firstHeader = document.querySelector('.m-header');
       if (firstHeader) toggleTranche(firstHeader);
+      initPortalChart();
     });
 
     let portalChartInited = false;
