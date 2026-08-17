@@ -61,7 +61,7 @@
 **Slide 8:** ✨ **Initial Clients & Projects** — ₹85L+ Signed Pipeline
    - Hyrox Fit Club: Digital Marketing + Website (₹22L, 4 months)
    - Naveen Sir's PR: Brand Building Campaign (₹18L, 3 months)
-   - ArtSanshi Ventures: Platform from scratch with AWS infra (₹50L, 6 months)
+   - ArtSanshi Ventures: Two projects — Udyam Kendra and Bookyagift Marketplace — with AWS infrastructure (₹50L, 6 months)
    - Demonstrates proven delivery complexity, diverse verticals, locked-in revenue  
 **Slide 9:** Financial Ask & Use of Capital (tranche structure with gates)  
 **Slide 10:** Revenue & EBITDA Path (24-month financial projections)  

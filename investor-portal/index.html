@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parambhaav — Investor Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --navy: #0F172A;
+      --navy-mid: #1E293B;
+      --indigo: #6366F1;
+      --indigo-dark: #4338CA;
+      --gold: #F59E0B;
+      --gold-light: #FCD34D;
+      --green: #10B981;
+      --red: #EF4444;
+      --amber: #F59E0B;
+      --white: #fff;
+      --gray-50: #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-400: #94A3B8;
+      --gray-600: #475569;
+      --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-100); min-height: 100vh; }
+
+    /* ── Login screen ── */
+    #login-screen {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, #312E81 60%, var(--navy-mid) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-box {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+    }
+    .login-logo {
+      font-size: 2.2em;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 30%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+    .login-sub { font-size: 0.85em; color: rgba(255,255,255,.55); margin-bottom: 36px; }
+    .login-label { display: block; text-align: left; font-size: 0.78em; font-weight: 600; color: rgba(255,255,255,.6); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 8px; }
+    .login-input {
+      width: 100%;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      padding: 13px 16px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95em;
+      margin-bottom: 20px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .login-input:focus { border-color: var(--indigo); }
+    .login-input::placeholder { color: rgba(255,255,255,.3); }
+    .login-btn {
+      width: 100%;
+      background: var(--indigo);
+      color: var(--white);
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .login-btn:hover { background: var(--indigo-dark); transform: translateY(-1px); }
+    .login-error {
+      font-size: 0.82em;
+      color: #FCA5A5;
+      margin-top: 14px;
+      display: none;
+    }
+    .login-badge {
+      display: inline-block;
+      background: rgba(245,158,11,.15);
+      border: 1px solid rgba(245,158,11,.3);
+      border-radius: 50px;
+      padding: 5px 14px;
+      font-size: 0.72em;
+      color: var(--gold-light);
+      margin-bottom: 28px;
+      letter-spacing: .5px;
+    }
+
+    /* ── Portal dashboard ── */
+    #dashboard { display: none; }
+
+    /* Topbar */
+    .topbar {
+      background: var(--navy);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky; top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 0 rgba(255,255,255,.06);
+    }
+    .topbar-logo {
+      font-size: 1.2em;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff 30%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-badge {
+      background: rgba(99,102,241,.2);
+      border: 1px solid rgba(99,102,241,.35);
+      border-radius: 50px;
+      padding: 4px 12px;
+      font-size: 0.72em;
+      color: var(--indigo-light, #818CF8);
+      font-weight: 600;
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.6);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78em;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .logout-btn:hover { border-color: rgba(255,255,255,.4); color: var(--white); }
+
+    /* Main content */
+    .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    /* Section header */
+    .section-head { margin-bottom: 16px; }
+    .section-head h2 { font-size: 1.05em; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .section-head p  { font-size: 0.8em; color: var(--gray-600); }
+
+    /* KPI row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      border: 1px solid var(--gray-200);
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .kpi-card.indigo::before  { background: var(--indigo); }
+    .kpi-card.gold::before    { background: var(--gold); }
+    .kpi-card.green::before   { background: var(--green); }
+    .kpi-card.amber::before   { background: var(--amber); }
+    .kpi-label { font-size: 0.72em; font-weight: 600; color: var(--gray-400); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 10px; }
+    .kpi-val   { font-size: 1.9em; font-weight: 800; color: var(--navy); line-height: 1; margin-bottom: 6px; }
+    .kpi-sub   { font-size: 0.75em; color: var(--gray-600); line-height: 1.5; }
+    .kpi-badge {
+      display: inline-block;
+      background: #DCFCE7;
+      color: #166534;
+      border-radius: 50px;
+      padding: 2px 8px;
+      font-size: 0.68em;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .kpi-badge.warn { background: #FEF9C3; color: #854D0E; }
+
+    /* Two-column layout */
+    .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    .col-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+
+    /* Panel */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .panel-head {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel-head h3 { font-size: 0.9em; font-weight: 700; color: var(--navy); }
+    .panel-head span { font-size: 0.72em; color: var(--gray-400); }
+    .panel-body { padding: 18px 22px; }
+
+    /* Chart */
+    .chart-wrap { height: 220px; position: relative; }
+
+    /* Milestone tracker */
+    /* Milestone tracker */
+    .milestone-list { padding: 0; }
+    .milestone-item {
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .milestone-item:last-child { border-bottom: none; }
+
+    /* Clickable header row */
+    .m-header {
+      display: flex;
+      gap: 14px;
+      padding: 14px 22px;
+      align-items: flex-start;
+      cursor: pointer;
+      user-select: none;
+      transition: background .15s;
+    }
+    .m-header:hover { background: var(--gray-50); }
+
+    .m-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72em;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .m-dot.done    { background: #DCFCE7; color: #166534; }
+    .m-dot.active  { background: var(--indigo); color: var(--white); box-shadow: 0 0 0 4px rgba(99,102,241,.15); }
+    .m-dot.pending { background: var(--gray-100); color: var(--gray-400); }
+
+    .m-content { flex: 1; min-width: 0; }
+    .m-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; gap: 8px; }
+    .m-title   { font-size: 0.87em; font-weight: 700; color: var(--navy); }
+    .m-amount  { font-size: 0.82em; font-weight: 700; color: var(--indigo); white-space: nowrap; }
+    .m-desc    { font-size: 0.77em; color: var(--gray-600); line-height: 1.5; margin-bottom: 6px; }
+
+    .m-footer  { display: flex; align-items: center; justify-content: space-between; }
+    .m-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      border-radius: 50px;
+      padding: 2px 9px;
+      font-size: 0.68em;
+      font-weight: 600;
+    }
+    .m-tag.done    { background: #DCFCE7; color: #166534; }
+    .m-tag.active  { background: #EEF2FF; color: var(--indigo-dark); }
+    .m-tag.pending { background: var(--gray-100); color: var(--gray-600); }
+
+    /* Chevron toggle */
+    .m-chevron {
+      font-size: 0.7em;
+      color: var(--gray-400);
+      transition: transform .25s;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .m-header.open .m-chevron { transform: rotate(180deg); }
+
+    /* Progress bar */
+    .prog-bar { height: 5px; background: var(--gray-100); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+    .prog-fill { height: 100%; border-radius: 3px; }
+    .prog-fill.indigo { background: var(--indigo); }
+    .prog-fill.gold   { background: var(--gold); }
+    .prog-fill.green  { background: var(--green); }
+
+    /* Expandable action list */
+    .m-actions {
+      display: none;
+      padding: 0 22px 14px 68px;
+      flex-direction: column;
+      gap: 0;
+    }
+    .m-actions.open { display: flex; }
+
+    .action-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 0.8em;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+    .action-item:last-child { border-bottom: none; }
+    .action-item.done-item  { color: var(--navy); }
+
+    .action-check {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65em;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .action-check.done    { background: #DCFCE7; color: #166534; }
+    .action-check.pending { background: var(--gray-100); color: var(--gray-400); border: 1.5px dashed var(--gray-300); }
+
+    /* Client pipeline */
+    .client-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 22px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .client-row:last-child { border-bottom: none; }
+    .client-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1em;
+      flex-shrink: 0;
+    }
+    .client-icon.indigo { background: #EEF2FF; }
+    .client-icon.purple { background: #F5F3FF; }
+    .client-icon.gold   { background: #FFFBEB; }
+    .client-info { flex: 1; }
+    .client-name   { font-size: 0.88em; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .client-detail { font-size: 0.75em; color: var(--gray-600); }
+    .client-amount { font-size: 0.95em; font-weight: 800; color: var(--indigo); }
+    .client-status {
+      font-size: 0.68em;
+      font-weight: 600;
+      border-radius: 50px;
+      padding: 3px 10px;
+    }
+    .client-status.signed   { background: #DCFCE7; color: #166534; }
+    .client-status.active   { background: #EEF2FF; color: var(--indigo-dark); }
+    .client-status.final    { background: #FEF9C3; color: #854D0E; }
+
+    /* Progress bar */
+    .prog-fill { transition: width .6s ease; }
+
+    /* Stats row */
+    .stat-row {
+      display: flex;
+      gap: 0;
+    }
+    .stat-item {
+      flex: 1;
+      padding: 16px 18px;
+      border-right: 1px solid var(--gray-100);
+      text-align: center;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-val { font-size: 1.35em; font-weight: 800; color: var(--navy); margin-bottom: 3px; }
+    .stat-lbl { font-size: 0.72em; color: var(--gray-400); font-weight: 500; }
+
+    /* Links section */
+    .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: border-color .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .link-card:hover { border-color: var(--indigo); box-shadow: 0 2px 12px rgba(99,102,241,.12); }
+    .link-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: #EEF2FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+    .link-title { font-size: 0.87em; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .link-desc  { font-size: 0.73em; color: var(--gray-600); }
+
+    /* Contact card */
+    .contact-card {
+      background: linear-gradient(135deg, var(--navy) 0%, #312E81 100%);
+      border-radius: var(--radius);
+      padding: 24px;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .contact-avatar {
+      width: 52px; height: 52px;
+      background: rgba(255,255,255,.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4em;
+      flex-shrink: 0;
+    }
+    .contact-name { font-size: 1em; font-weight: 700; margin-bottom: 3px; }
+    .contact-role { font-size: 0.78em; color: rgba(255,255,255,.6); margin-bottom: 8px; }
+    .contact-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .contact-link {
+      font-size: 0.75em;
+      color: var(--gold-light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .contact-link:hover { color: var(--white); }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 0.73em;
+      color: var(--gray-400);
+      border-top: 1px solid var(--gray-200);
+      margin-top: 12px;
+    }
+
+    /* Confidential badge */
+    .confidential {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 50px;
+      padding: 4px 12px;
+      font-size: 0.7em;
+      font-weight: 700;
+      color: #991B1B;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .col-2, .col-3 { grid-template-columns: 1fr; }
+      .links-grid { grid-template-columns: 1fr; }
+      .contact-card { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 500px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .topbar { padding: 0 16px; }
+      .main { padding: 20px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">PARAMBHAAV</div>
+      <p class="login-sub">Technology Services &middot; Academy &middot; Managed Engineering</p>
+      <div class="login-badge">&#128274; Investor Portal &mdash; Confidential</div>
+
+      <label class="login-label" for="inv-name">Your Name</label>
+      <input class="login-input" id="inv-name" type="text" placeholder="e.g. Naveen Kumar" autocomplete="off" />
+
+      <label class="login-label" for="inv-pass">Access Code</label>
+      <input class="login-input" id="inv-pass" type="password" placeholder="Enter access code" autocomplete="off"
+             onkeydown="if(event.key==='Enter') doLogin()" />
+
+      <button class="login-btn" onclick="doLogin()">Access Investor Portal &rarr;</button>
+      <p class="login-error" id="login-error">Incorrect access code. Please contact Prashanth.</p>
+
+      <p style="color:rgba(255,255,255,.35);font-size:.7em;margin-top:20px;">For access: prashanth@parambhaav.com</p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-logo">PARAMBHAAV</div>
+      <div class="topbar-right">
+        <span class="topbar-badge">Investor Portal</span>
+        <span id="investor-name-badge" style="font-size:.8em;color:rgba(255,255,255,.6);"></span>
+        <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 style="font-size:1.4em;font-weight:800;color:var(--navy);margin-bottom:4px;">Investment Overview</h1>
+          <p style="font-size:.82em;color:var(--gray-600);">Parambhaav Technology Services &middot; Updated August 2026 &middot; <span style="color:var(--indigo);font-weight:600;">Pre-Investment Stage</span></p>
+        </div>
+        <span class="confidential">&#9888; Strictly Confidential</span>
+      </div>
+
+      <!-- KPI row -->
+      <div class="kpi-grid">
+        <div class="kpi-card indigo">
+          <div class="kpi-label">Investment Ask</div>
+          <div class="kpi-val">&#8377;5Cr</div>
+          <div class="kpi-sub">Over 24 months<br/>4 milestone-gated tranches</div>
+          <span class="kpi-badge">Structured</span>
+        </div>
+        <div class="kpi-card gold">
+          <div class="kpi-label">Year-1 Pipeline (Signed)</div>
+          <div class="kpi-val">&#8377;90L</div>
+          <div class="kpi-sub">3 clients contracted<br/>Exceeds &#8377;1Cr target</div>
+          <span class="kpi-badge">Locked In</span>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Expected ROI</div>
+          <div class="kpi-val">4&ndash;6&times;</div>
+          <div class="kpi-sub">In 3&ndash;4 years<br/>Exit value &#8377;20&ndash;50Cr</div>
+          <span class="kpi-badge">Year 4 Target</span>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Gross Margin (Year 4)</div>
+          <div class="kpi-val">55%</div>
+          <div class="kpi-sub">Growing from 45% in Year 1<br/>Industry-best margins</div>
+          <span class="kpi-badge warn">+10pp over 4 yrs</span>
+        </div>
+      </div>
+
+      <!-- Revenue chart + Milestone tracker -->
+      <div class="col-2">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Revenue &amp; EBITDA Projections</h3>
+            <span>4-Year View</span>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap"><canvas id="portalRevenueChart"></canvas></div>
+            <div class="stat-row" style="margin-top:12px;border-top:1px solid var(--gray-100);">
+              <div class="stat-item">
+                <div class="stat-val">&#8377;1.5Cr</div>
+                <div class="stat-lbl">Year-1 Revenue</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val">&#8377;4Cr</div>
+                <div class="stat-lbl">Year-2 Revenue</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val">&#8377;30Cr</div>
+                <div class="stat-lbl">Year-4 Revenue</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Tranche Milestone Tracker</h3>
+            <span>&#8377;5Cr over 4 tranches</span>
+          </div>
+          <div class="milestone-list">
+
+            <!-- T1 -->
+            <div class="milestone-item">
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot active">T1</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 1 &mdash; Month 1</div>
+                    <div class="m-amount">&#8377;1.5 Crore</div>
+                  </div>
+                  <div class="m-desc">Setup: company, team, office, legal, equipment &amp; working capital</div>
+                  <div class="m-footer">
+                    <span class="m-tag active">&#9654; Current Stage</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">5 / 7 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:72%"></div></div>
+                </div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Company registered &amp; legal entity formed (PVT LTD)
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Founding team onboarded (Prashanth + Manjunath)
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Office space secured in Bengaluru
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  Bank account opened &amp; board signatories confirmed
+                </div>
+                <div class="action-item done-item">
+                  <div class="action-check done">&#10003;</div>
+                  3 client contracts signed (Hyrox, Naveen PR, ArtSanshi)
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Equipment &amp; tech infrastructure purchased
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Accounting &amp; GST compliance framework finalised
+                </div>
+              </div>
+            </div>
+
+            <!-- T2 -->
+            <div class="milestone-item">
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot pending">T2</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 2 &mdash; Month 4</div>
+                    <div class="m-amount">&#8377;1.5 Crore</div>
+                  </div>
+                  <div class="m-desc">Delivery acceleration &amp; team expansion</div>
+                  <div class="m-footer">
+                    <span class="m-tag pending">Pending Gate</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">0 / 6 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:0%"></div></div>
+                </div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Revenue of &#8377;30L+ achieved by Month 4
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Gross margin maintained at 46%+
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Client satisfaction verified by Board
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Hire 4&ndash;6 additional engineers (with signing bonuses)
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Launch marketing campaigns to expand client pipeline
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Deliver first milestone on all 3 signed contracts
+                </div>
+              </div>
+            </div>
+
+            <!-- T3 -->
+            <div class="milestone-item">
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot pending">T3</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 3 &mdash; Month 10</div>
+                    <div class="m-amount">&#8377;1.0 Crore</div>
+                  </div>
+                  <div class="m-desc">Academy launch &amp; FDE management infrastructure</div>
+                  <div class="m-footer">
+                    <span class="m-tag pending">Pending Gate</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">0 / 7 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:0%"></div></div>
+                </div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Year-1 revenue &#8377;50L+ confirmed
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> All 3 original clients retained &amp; active
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Gross margin improved to 48%+
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Academy curriculum drafted &amp; Board-approved
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Hire 2 academy trainers (salary + benefits for 6 months)
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Set up FDE management team structure
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Begin development of academy tech platform (LMS)
+                </div>
+              </div>
+            </div>
+
+            <!-- T4 -->
+            <div class="milestone-item">
+              <div class="m-header" onclick="toggleTranche(this)">
+                <div class="m-dot pending">T4</div>
+                <div class="m-content">
+                  <div class="m-top-row">
+                    <div class="m-title">Tranche 4 &mdash; Month 16</div>
+                    <div class="m-amount">&#8377;1.0 Crore</div>
+                  </div>
+                  <div class="m-desc">Scale operations &amp; aggressive growth phase</div>
+                  <div class="m-footer">
+                    <span class="m-tag pending">Pending Gate</span>
+                    <span style="font-size:.68em;color:var(--gray-400);">0 / 6 done</span>
+                  </div>
+                  <div class="prog-bar"><div class="prog-fill indigo" style="width:0%"></div></div>
+                </div>
+                <div class="m-chevron">&#9660;</div>
+              </div>
+              <div class="m-actions">
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Full Year-1 revenue &#8377;1.3Cr+ confirmed
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> EBITDA breakeven path validated by Board
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> Recurring revenue is 25%+ of total revenue
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  <strong>Gate:</strong> FDE pilots running with 1&ndash;2 clients
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Hire 4&ndash;8 additional engineers for scale
+                </div>
+                <div class="action-item">
+                  <div class="action-check pending">&mdash;</div>
+                  Expand office space &amp; scale sales/marketing team
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Client pipeline + Burn rate -->
+      <div class="col-2">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Signed Client Pipeline</h3>
+            <span>&#8377;90L contracted</span>
+          </div>
+          <div>
+            <div class="client-row">
+              <div class="client-icon indigo">&#127947;</div>
+              <div class="client-info">
+                <div class="client-name">Hyrox Fit Club</div>
+                <div class="client-detail">Digital Marketing + Website &middot; 4 months</div>
+              </div>
+              <span class="client-amount">&#8377;22L</span>
+              <span class="client-status signed">Signed</span>
+            </div>
+            <div class="client-row">
+              <div class="client-icon purple">&#128226;</div>
+              <div class="client-info">
+                <div class="client-name">Naveen Sir&rsquo;s PR Brand</div>
+                <div class="client-detail">PR &amp; Digital Brand Building &middot; 3 months</div>
+              </div>
+              <span class="client-amount">&#8377;18L</span>
+              <span class="client-status signed">Signed</span>
+            </div>
+            <div class="client-row">
+              <div class="client-icon gold">&#127959;</div>
+              <div class="client-info">
+                <div class="client-name">ArtSanshi Ventures</div>
+                <div class="client-detail">2 projects: Udyam Kendra + Bookyagift Marketplace &middot; 6 months</div>
+              </div>
+              <span class="client-amount">&#8377;50L</span>
+              <span class="client-status active">Active</span>
+            </div>
+          </div>
+          <div class="panel-body" style="border-top:1px solid var(--gray-100);padding-top:14px;">
+            <div style="display:flex;gap:24px;flex-wrap:wrap;">
+              <div><div style="font-size:.72em;color:var(--gray-400);font-weight:600;margin-bottom:4px;">TOTAL PIPELINE</div><div style="font-size:1.3em;font-weight:800;color:var(--indigo);">&#8377;90 Lakhs</div></div>
+              <div><div style="font-size:.72em;color:var(--gray-400);font-weight:600;margin-bottom:4px;">GROSS MARGIN</div><div style="font-size:1.3em;font-weight:800;color:var(--green);">45&ndash;50%</div></div>
+              <div><div style="font-size:.72em;color:var(--gray-400);font-weight:600;margin-bottom:4px;">RETENTION TYPE</div><div style="font-size:1.3em;font-weight:800;color:var(--navy);">High</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Financial Snapshot</h3>
+            <span>4-Year Model</span>
+          </div>
+          <div class="panel-body">
+            <div style="margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:.78em;font-weight:600;color:var(--navy);">Year-1 Revenue</span>
+                <span style="font-size:.78em;font-weight:700;color:var(--indigo);">&#8377;1.3&ndash;1.8Cr</span>
+              </div>
+              <div class="prog-bar"><div class="prog-fill indigo" style="width:6%"></div></div>
+              <div style="font-size:.68em;color:var(--gray-400);margin-top:3px;">6% of Year-4 target</div>
+            </div>
+            <div style="margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:.78em;font-weight:600;color:var(--navy);">Year-2 Revenue</span>
+                <span style="font-size:.78em;font-weight:700;color:var(--gold);">&#8377;3.5&ndash;4.6Cr</span>
+              </div>
+              <div class="prog-bar"><div class="prog-fill gold" style="width:15%"></div></div>
+              <div style="font-size:.68em;color:var(--gray-400);margin-top:3px;">15% of Year-4 target</div>
+            </div>
+            <div style="margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:.78em;font-weight:600;color:var(--navy);">Year-4 Revenue</span>
+                <span style="font-size:.78em;font-weight:700;color:var(--green);">&#8377;25.5&ndash;30.5Cr</span>
+              </div>
+              <div class="prog-bar"><div class="prog-fill green" style="width:100%"></div></div>
+              <div style="font-size:.68em;color:var(--gray-400);margin-top:3px;">Target exit value &#8377;20&ndash;50Cr</div>
+            </div>
+            <div style="background:var(--gray-50);border-radius:8px;padding:14px;margin-top:6px;">
+              <div style="font-size:.72em;font-weight:700;color:var(--navy);margin-bottom:8px;">KEY METRICS</div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;justify-content:space-between;font-size:.8em;"><span style="color:var(--gray-600);">Monthly Burn Rate</span><span style="font-weight:700;color:var(--navy);">&#8377;40&ndash;45L</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:.8em;"><span style="color:var(--gray-600);">Breakeven Month</span><span style="font-weight:700;color:var(--navy);">Month 10&ndash;12</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:.8em;"><span style="color:var(--gray-600);">Positive EBITDA</span><span style="font-weight:700;color:var(--green);">Year 2 (conservative)</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:.8em;"><span style="color:var(--gray-600);">Year-4 EBITDA</span><span style="font-weight:700;color:var(--green);">&#8377;8&ndash;10Cr</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Access + Team + Contact -->
+      <div class="col-3">
+        <div class="panel">
+          <div class="panel-head"><h3>Quick Access</h3></div>
+          <div class="panel-body">
+            <div class="links-grid">
+              <div class="link-card" onclick="window.open('../investor-presentation.html','_blank')">
+                <div class="link-icon">&#127914;</div>
+                <div>
+                  <div class="link-title">Pitch Deck</div>
+                  <div class="link-desc">14-slide interactive presentation</div>
+                </div>
+              </div>
+              <div class="link-card" onclick="window.open('../EXECUTIVE_SUMMARY.md','_blank')">
+                <div class="link-icon">&#128203;</div>
+                <div>
+                  <div class="link-title">Exec Summary</div>
+                  <div class="link-desc">One-page investor brief</div>
+                </div>
+              </div>
+              <div class="link-card" onclick="window.open('../FINANCIAL_PROJECTIONS.csv','_blank')">
+                <div class="link-icon">&#128200;</div>
+                <div>
+                  <div class="link-title">Financials CSV</div>
+                  <div class="link-desc">Month-by-month model</div>
+                </div>
+              </div>
+              <div class="link-card" onclick="window.open('../parambhaav-naveen-investment-business-plan.md','_blank')">
+                <div class="link-icon">&#128196;</div>
+                <div>
+                  <div class="link-title">Business Plan</div>
+                  <div class="link-desc">Full legal &amp; operational plan</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Leadership Team</h3></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:40px;height:40px;background:#EEF2FF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0;">&#128104;</div>
+              <div>
+                <div style="font-size:.88em;font-weight:700;color:var(--navy);">Prashanth Galagali</div>
+                <div style="font-size:.75em;color:var(--indigo);font-weight:600;margin-bottom:3px;">Founder &amp; CEO</div>
+                <div style="font-size:.75em;color:var(--gray-600);line-height:1.5;">12 years building tech companies &middot; 5+ successful exits &middot; &#8377;0&rarr;&#8377;50Cr+ track record</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:40px;height:40px;background:#FFFBEB;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0;">&#128104;&#8205;&#128187;</div>
+              <div>
+                <div style="font-size:.88em;font-weight:700;color:var(--navy);">Manjunath</div>
+                <div style="font-size:.75em;color:var(--gold);font-weight:600;margin-bottom:3px;">Finance Director</div>
+                <div style="font-size:.75em;color:var(--gray-600);line-height:1.5;">10+ years startup ops &middot; compliance &middot; board governance</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:40px;height:40px;background:#DCFCE7;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0;">&#128101;</div>
+              <div>
+                <div style="font-size:.88em;font-weight:700;color:var(--navy);">Tech Advisory Board</div>
+                <div style="font-size:.75em;color:var(--green);font-weight:600;margin-bottom:3px;">Advisory</div>
+                <div style="font-size:.75em;color:var(--gray-600);line-height:1.5;">Senior engineers &middot; architecture direction &middot; delivery quality standards</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="contact-card">
+            <div class="contact-avatar">&#128222;</div>
+            <div>
+              <div class="contact-name">Prashanth Galagali</div>
+              <div class="contact-role">Founder &amp; CEO, Parambhaav</div>
+              <div class="contact-links">
+                <a class="contact-link" href="mailto:prashanth@parambhaav.com">&#9993; prashanth@parambhaav.com</a>
+              </div>
+            </div>
+          </div>
+          <div class="panel" style="flex:1;">
+            <div class="panel-body">
+              <div style="font-size:.78em;font-weight:700;color:var(--navy);margin-bottom:10px;">NEXT STEPS</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;gap:10px;align-items:flex-start;font-size:.78em;">
+                  <span style="width:20px;height:20px;background:#EEF2FF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7em;font-weight:700;color:var(--indigo);flex-shrink:0;">1</span>
+                  <span style="color:var(--gray-600);">Review pitch deck &amp; exec summary</span>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font-size:.78em;">
+                  <span style="width:20px;height:20px;background:#EEF2FF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7em;font-weight:700;color:var(--indigo);flex-shrink:0;">2</span>
+                  <span style="color:var(--gray-600);">Discuss financial model &amp; projections</span>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font-size:.78em;">
+                  <span style="width:20px;height:20px;background:#EEF2FF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7em;font-weight:700;color:var(--indigo);flex-shrink:0;">3</span>
+                  <span style="color:var(--gray-600);">Share business plan with legal team</span>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font-size:.78em;">
+                  <span style="width:20px;height:20px;background:#EEF2FF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7em;font-weight:700;color:var(--indigo);flex-shrink:0;">4</span>
+                  <span style="color:var(--gray-600);">Agree terms &rarr; execute SHA &amp; investment</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        Parambhaav Technology Services &middot; Investment Package August 2026 &middot; Strictly Confidential<br/>
+        Do not distribute without written consent of Prashanth Galagali.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ACCESS_CODE = 'Naveen@2026';
+
+    function doLogin() {
+      const name = document.getElementById('inv-name').value.trim();
+      const pass = document.getElementById('inv-pass').value;
+      const err  = document.getElementById('login-error');
+
+      if (pass !== ACCESS_CODE) {
+        err.style.display = 'block';
+        document.getElementById('inv-pass').style.borderColor = '#EF4444';
+        return;
+      }
+
+      sessionStorage.setItem('inv_auth', '1');
+      sessionStorage.setItem('inv_name', name || 'Investor');
+      showDashboard(name || 'Investor');
+    }
+
+    function showDashboard(name) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('investor-name-badge').textContent = 'Welcome, ' + name;
+      initPortalChart();
+    }
+
+    function doLogout() {
+      sessionStorage.removeItem('inv_auth');
+      sessionStorage.removeItem('inv_name');
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('inv-pass').value = '';
+    }
+
+    // Auto-login if session exists
+    if (sessionStorage.getItem('inv_auth') === '1') {
+      showDashboard(sessionStorage.getItem('inv_name') || 'Investor');
+    }
+
+    function toggleTranche(header) {
+      const actions = header.nextElementSibling;
+      const isOpen  = header.classList.contains('open');
+      header.classList.toggle('open', !isOpen);
+      actions.classList.toggle('open', !isOpen);
+    }
+
+    // Auto-open T1 on load since it's the current stage
+    document.addEventListener('DOMContentLoaded', () => {
+      const firstHeader = document.querySelector('.m-header');
+      if (firstHeader) toggleTranche(firstHeader);
+    });
+
+    let portalChartInited = false;
+    function initPortalChart() {
+      if (portalChartInited) return;
+      portalChartInited = true;
+      const ctx = document.getElementById('portalRevenueChart').getContext('2d');
+      new Chart(ctx, {
+        data: {
+          labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4'],
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Services (Cr)',
+              data: [1.25, 2.25, 4.5, 9],
+              backgroundColor: 'rgba(99,102,241,.75)',
+              borderRadius: 4,
+              stack: 'rev'
+            },
+            {
+              type: 'bar',
+              label: 'FDE + Academy (Cr)',
+              data: [0.3, 1.55, 6.8, 21],
+              backgroundColor: 'rgba(245,158,11,.8)',
+              borderRadius: 4,
+              stack: 'rev'
+            },
+            {
+              type: 'line',
+              label: 'EBITDA (Cr)',
+              data: [-0.5, 0.35, 2.5, 9],
+              borderColor: '#10B981',
+              pointBackgroundColor: '#10B981',
+              borderWidth: 2.5,
+              tension: 0.4,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { font: { family: 'Inter', size: 10 }, boxWidth: 10, padding: 12 } },
+            tooltip: { callbacks: { label: c => ' ₹' + c.parsed.y.toFixed(2) + ' Cr' } }
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false }, ticks: { font: { family: 'Inter', size: 10 } } },
+            y: { stacked: true, grid: { color: 'rgba(0,0,0,.05)' }, ticks: { font: { family: 'Inter', size: 10 }, callback: v => '₹' + v + 'Cr' } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

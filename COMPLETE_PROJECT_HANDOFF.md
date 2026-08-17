@@ -162,8 +162,8 @@ Three contracts already signed or in final stage — diverse industry verticals,
 - Value: ₹18 Lakhs
 
 **Client 3: 🏗️ ArtSanshi Ventures**
-- Project: Platform & FDE Team — Built from Scratch
-- Scope: Architecture design, platform development, AWS infra setup, loan distribution system, marketplace products (Udyam Kendra, Bookyagift)
+- Project: Two Platforms + FDE Team — Built from Scratch
+- Scope: Two distinct projects — Udyam Kendra and Bookyagift Marketplace — including architecture design, platform development, AWS infrastructure, and loan distribution systems
 - Timeline: 6 months (ideation → MVP)
 - Value: ₹50 Lakhs
 
