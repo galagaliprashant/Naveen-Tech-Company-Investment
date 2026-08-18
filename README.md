@@ -5,6 +5,11 @@
 **Expected ROI:** 4-6x return in 3-4 years  
 **Target Exit Value:** ₹20-50 Crore by Year 4
 
+### 🔗 Quick Links
+
+- 🎬 **[Investor Presentation](https://galagaliprashant.github.io/Naveen-Tech-Company-Investment/investor-presentation.html)** — live 14-slide interactive deck
+- 📊 **[Investor Portal](https://galagaliprashant.github.io/Naveen-Tech-Company-Investment/investor-portal/index.html)** — live dashboard (revenue charts, tranche tracker, client pipeline)
+
 ---
 
 ## 📁 Folder Contents
