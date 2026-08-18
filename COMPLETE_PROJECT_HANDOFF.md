@@ -3,7 +3,25 @@
 
 **Created:** August 16, 2026  
 **Status:** Live & Shareable ✅  
-**Last Updated:** August 16, 2026
+**Last Updated:** August 17, 2026
+
+---
+
+# 🗂️ REPO & BRANCH STATE (as of Aug 17, 2026)
+
+**GitHub repo:** `galagaliprashant/Naveen-Tech-Company-Investment`
+
+**`main`** — at commit `655d566` ("feat: enhanced investor presentation + investor portal (#1)", squash-merged). Contains: modernised presentation (navy/indigo/gold, Chart.js, PDF export), the investor portal dashboard, tranche tracker toggles.
+
+**`feature/enhanced-presentation-investor-portal`** — currently rebased on top of `main`, at commit `08d2916`. Ahead of `main` by 2 commits:
+- `fb0379e` — "Add closing slide actions"
+- `08d2916` — "Remove investor portal login screen"
+
+**Open PR:** #2, `feature/enhanced-presentation-investor-portal` → `main`, no description, not yet merged as of this writing. (PR #1, which merged the earlier batch of commits, is already closed/merged.)
+
+**⚠️ Security flag for whoever picks this up:** the investor portal (`investor-portal/index.html`) originally had a password login screen; it was removed in commit `08d2916`. The portal is now **fully unauthenticated**. If/when this repo is served via GitHub Pages, anyone with the URL can view tranche financials and client contract values with no gate. Confirm this is intentional before merging PR #2, or re-add access control first.
+
+**Note on squash-merges in this repo:** PR #1 squash-merged several commits into `main` under a new hash, which made the original feature branch appear to conflict with `main` even though the content was identical — a rebase (dropping the already-merged commits, keeping only the two new ones) resolved it. Any agent continuing this branch should rebase onto `main` rather than merge, to avoid the same false-conflict issue.
 
 ---
 
@@ -281,7 +299,8 @@ Three contracts already signed or in final stage — diverse industry verticals,
 
 | File | Purpose | Key Content |
 |------|---------|-------------|
-| `investor-presentation.html` | Interactive 14-slide deck (LIVE ON GITHUB PAGES) | Full pitch presentation, navigable online |
+| `investor-presentation.html` | Interactive 14-slide deck (LIVE ON GITHUB PAGES) | Full pitch presentation, navigable online, Chart.js financial charts, PDF export, closing-slide CTA buttons |
+| `investor-portal/index.html` | Investor dashboard (no login as of `08d2916`) | Revenue/EBITDA chart, tranche milestone tracker with expandable action-item toggles (green = done), signed client pipeline, financial snapshot, quick access links, leadership team |
 | `README.md` | Quick start guide + overview | How to use each file, slide descriptions, quick start scenarios |
 | `EXECUTIVE_SUMMARY.md` | One-page investor summary | Opportunity, why now, solution, financial highlights, de-risking |
 | `FINANCIAL_PROJECTIONS.csv` | Detailed Excel-ready model | Month-by-month Y1, quarterly Y2, annual Y3-Y4, sensitivity analysis, investor returns |
@@ -448,11 +467,14 @@ https://github.com/galagaliprashant/Naveen-Tech-Company-Investment
 - ✅ GitHub Pages live & shareable
 - ✅ 3 signed clients added to presentation
 - ✅ All files organized and documented
+- ✅ Investor portal dashboard built (revenue chart, tranche tracker, client pipeline)
+- ⚠️ Investor portal login screen removed — dashboard is currently unauthenticated (see security flag above)
+- 🔄 PR #2 (`feature/enhanced-presentation-investor-portal` → `main`) open, rebased cleanly, awaiting description + merge
 
-**Last Updated:** August 16, 2026  
+**Last Updated:** August 17, 2026  
 **Presentation Live:** YES ✅  
 **Shareable Link:** YES ✅  
-**Ready for Investor Outreach:** YES ✅
+**Ready for Investor Outreach:** YES ✅ (pending decision on portal access control)
 
 ---
 
